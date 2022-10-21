@@ -9,15 +9,14 @@
 
 'use strict'
 
-const config = require('./config').config
-const logger = require('./logger').logger
+const { config } = require('./config')
+const { logger } = require('./logger')
 
 const TelegramBot = require('node-telegram-bot-api')
 
 const token = config.bot.apikey
 
 // Create a bot that uses 'polling' to fetch new updates
-// @ts-ignore
 const bot = new TelegramBot(token, {polling: true})
 
 // Matches "/echo [whatever]"
@@ -45,3 +44,10 @@ bot.on('message', (msg) => {
   // send a message to the chat acknowledging receipt of their message
   bot.sendMessage(chatId, '[No chat, no commands accepted]')
 })
+
+/***
+bot.on('polling_error', (error) => {
+  logger.debug(error.name, { label: "TBOT" });  // => 'ETELEGRAM'
+  logger.debug(error.message, { label: "TBOT" }); // => { ok: false, error_code: 400, description: 'Bad Request: chat not found' }
+})
+*/

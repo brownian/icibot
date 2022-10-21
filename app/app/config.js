@@ -1,6 +1,5 @@
 /**
  * 
- * 
  */
 
 // @ts-check
@@ -12,7 +11,7 @@ const config = {
     mode: ( process.env.NODE_ENV === 'production' ) && 'PROD' || 'DEV',
     bot: {
         // @ts-ignore
-        apikey: process.env.TBOT_AUTHTOKEN
+        apikey: process.env.TBOT_AUTHTOKEN || "<THIS_WONT_WORK>"
     }
 }
 
