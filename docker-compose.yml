@@ -193,7 +193,6 @@ services:
       - TBOT_AUTHTOKEN=${TBOT_AUTHTOKEN}
     volumes:
       - ./app/logs:/usr/app/logs
-      - .env:/usr/app/app/.env
     command: "npm start"
 
 volumes:
