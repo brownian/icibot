@@ -4,6 +4,7 @@ version: '3.7'
 
 x-icinga-db-web-config:
   &icinga-db-web-config
+  TZ: ${TIMEZONE}
   icingaweb.modules.icingadb.config.icingadb.resource: icingadb
   icingaweb.modules.icingadb.redis.redis1.host: icingadb-redis
   icingaweb.modules.icingadb.redis.redis1.port: 6379
@@ -22,6 +23,7 @@ x-icinga-db-web-config:
 
 x-icinga-director-config:
   &icinga-director-config
+  TZ: ${TIMEZONE}
   icingaweb.modules.director.config.db.resource: director-mysql
   icingaweb.modules.director.kickstart.config.endpoint: icinga2
   icingaweb.modules.director.kickstart.config.host: icinga2
@@ -38,6 +40,7 @@ x-icinga-director-config:
 
 x-icinga-web-config:
   &icinga-web-config
+  TZ: ${TIMEZONE}
   icingaweb.authentication.icingaweb2.backend: db
   icingaweb.authentication.icingaweb2.resource: icingaweb-mysql
   icingaweb.config.global.config_backend: db
@@ -76,6 +79,8 @@ networks:
 
 services:
   director:
+    environment:
+      TZ: ${TIMEZONE}
     command:
       - /bin/bash
       - -ce
@@ -135,6 +140,7 @@ services:
 
   icingadb:
     environment:
+      TZ: ${TIMEZONE}
       ICINGADB_DATABASE_HOST: mysql
       ICINGADB_DATABASE_PORT: 3306
       ICINGADB_DATABASE_DATABASE: icingadb
@@ -174,6 +180,7 @@ services:
     image: mariadb:10.7
     command: --default-authentication-plugin=mysql_native_password
     environment:
+      TZ: ${TIMEZONE}
       MYSQL_RANDOM_ROOT_PASSWORD: 1
       ICINGADB_MYSQL_PASSWORD: ${ICINGADB_MYSQL_PASSWORD:-icingadb}
       ICINGAWEB_MYSQL_PASSWORD: ${ICINGAWEB_MYSQL_PASSWORD:-icingaweb}
@@ -189,6 +196,7 @@ services:
     restart: unless-stopped
     working_dir: /usr/app
     environment:
+      - TZ=${TIMEZONE}
       - NODE_ENV=production
       - TBOT_AUTHTOKEN=${TBOT_AUTHTOKEN}
     volumes:
