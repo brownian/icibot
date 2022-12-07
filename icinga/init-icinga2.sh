@@ -12,8 +12,10 @@ if [ ! -f /data/etc/icinga2/features-enabled/icingadb.conf ]; then
   cat /config/icingadb.conf >/data/etc/icinga2/features-enabled/icingadb.conf
 fi
 
-sed -ie '/^apply Service "ssh"/,/^}/d'       /etc/icinga2/conf.d/services.conf
-sed -ie '/^apply Service for (http/,/^}/d'   /etc/icinga2/conf.d/services.conf
+sed -ie '/^apply Service "ping4"/,/^}/d'    /etc/icinga2/conf.d/services.conf
+sed -ie '/^apply Service "ping6"/,/^}/d'    /etc/icinga2/conf.d/services.conf
+sed -ie '/^apply Service "ssh"/,/^}/d'      /etc/icinga2/conf.d/services.conf
+sed -ie '/^apply Service for (http/,/^}/d'  /etc/icinga2/conf.d/services.conf
 
 sed -ie '/^object ServiceGroup "http"/,/^}/d' /etc/icinga2/conf.d/groups.conf
 sed -ie '/^object HostGroup "windows-/,/^}/d' /etc/icinga2/conf.d/groups.conf
