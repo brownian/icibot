@@ -19,3 +19,5 @@ sed -ie '/^apply Service for (http/,/^}/d'  /etc/icinga2/conf.d/services.conf
 
 sed -ie '/^object ServiceGroup "http"/,/^}/d' /etc/icinga2/conf.d/groups.conf
 sed -ie '/^object HostGroup "windows-/,/^}/d' /etc/icinga2/conf.d/groups.conf
+
+sed -ie '/vars\.disks\["disk \/"\]/,/^\s*}/d' /etc/icinga2/conf.d/hosts.conf
