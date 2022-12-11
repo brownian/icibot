@@ -12,6 +12,7 @@ if [ "$HIDE_IP" = "1" ]; then
     message=$(/bin/cat <<DATA
 ${message}
 Date/Time: $LONGDATETIME
+Last State Dur: $(convertsecs $DURATION_SEC)
 
 $HOSTOUTPUT
 DATA
@@ -21,6 +22,7 @@ else
 ${message}
 Address: $HOSTADDRESS
 Date/Time: $LONGDATETIME
+Last State Dur: $(convertsecs $DURATION_SEC)
 
 $HOSTOUTPUT
 DATA
