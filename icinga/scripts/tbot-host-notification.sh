@@ -2,6 +2,35 @@
 #
 #
 
+convertsecs() {
+ ((h=${1}/3600))
+ ((m=(${1}%3600)/60))
+ ((s=${1}%60))
+ printf "%02d:%02d:%02d\n" $h $m $s
+}
+
+NOW=`TZ=UTC date +"%s"`
+
+STATEFILE="/tmp/${HOSTNAME}_lastnotif_time"
+
+# if [ "$USERNAME" = "dor" ] ; then
+        if [ -f $STATEFILE ] ; then
+                SAVEDTIME=`cat ${STATEFILE}`
+                LAST_DURATION="У попередньому стані: $(convertsecs $((${NOW} - ${SAVEDTIME})))"
+        else
+                LAST_DURATION="У попередньому стані: (?)"
+        fi
+# fi
+
+echo $NOW > $STATEFILE
+
+if [ "$NOTIFICATIONTYPE" = "RECOVERY" ] ; then
+        NOTIFICATIONTYPE="СЛАВА УКРАЇНІ!!"
+else
+        NOTIFICATIONTYPE="СМЕРТЬ ВОРОГАМ!"
+fi
+
+
 message=$(/bin/cat <<DATA
 $NOTIFICATIONTYPE
 $HOSTDISPLAYNAME is *$HOSTSTATE*
@@ -11,8 +40,8 @@ DATA
 if [ "$HIDE_IP" = "1" ]; then
     message=$(/bin/cat <<DATA
 ${message}
-Date/Time: $LONGDATETIME
-Last State Dur: $(convertsecs $DURATION_SEC)
+Дата/час: $LONGDATETIME
+$LAST_DURATION
 
 $HOSTOUTPUT
 DATA
@@ -20,9 +49,9 @@ DATA
 else
     message=$(/bin/cat <<DATA
 ${message}
-Address: $HOSTADDRESS
-Date/Time: $LONGDATETIME
-Last State Dur: $(convertsecs $DURATION_SEC)
+Адреса: $HOSTADDRESS
+Дата/час: $LONGDATETIME
+$LAST_DURATION
 
 $HOSTOUTPUT
 DATA
@@ -33,7 +62,7 @@ if [ -n "$NOTIFICATIONCOMMENT" ]; then
     message=$(/bin/cat <<DATA
 ${message}
 
-Comment by $NOTIFICATIONAUTHORNAME:
+Коментар від $NOTIFICATIONAUTHORNAME:
 $NOTIFICATIONCOMMENT
 DATA
 )
@@ -51,4 +80,3 @@ curl -X POST \
      -H 'Content-Type: application/json' \
      -d "${data}" \
      https://api.telegram.org/bot${TBOT_AUTHTOKEN}/sendMessage
-
