@@ -3,10 +3,15 @@
 #
 
 convertsecs() {
- ((h=${1}/3600))
+ ((d=${1}/3600/24))
+ ((h=${1}/3600%24))
  ((m=(${1}%3600)/60))
  ((s=${1}%60))
- printf "%02d:%02d:%02d\n" $h $m $s
+ if [ $d -eq 0 ] ; then
+   printf "%02d:%02d:%02d\n" $h $m $s
+ else
+   printf "%2dd %02d:%02d:%02d\n" $d $h $m $s
+ fi
 }
 
 NOW=`TZ=UTC date +"%s"`
