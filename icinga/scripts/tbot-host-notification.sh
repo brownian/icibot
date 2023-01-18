@@ -16,25 +16,40 @@ convertsecs() {
 
 NOW=`TZ=UTC date +"%s"`
 
-STATEFILE="/tmp/${HOSTNAME}_lastnotif_time"
+STATEFILE="/data/var/spool/icinga2/tmp/${HOSTNAME}_lastnotif_time"
 
-# if [ "$USERNAME" = "dor" ] ; then
-        if [ -f $STATEFILE ] ; then
-                SAVEDTIME=`cat ${STATEFILE}`
-                LAST_DURATION="У попередньому стані: $(convertsecs $((${NOW} - ${SAVEDTIME})))"
-        else
-                LAST_DURATION="У попередньому стані: (?)"
-        fi
-# fi
-
-echo $NOW > $STATEFILE
-
-if [ "$NOTIFICATIONTYPE" = "RECOVERY" ] ; then
-        NOTIFICATIONTYPE="СЛАВА УКРАЇНІ!!"
+if [ -f $STATEFILE ] ; then
+        SAVEDTIME=`cat ${STATEFILE}`
+        LAST_DURATION=$(convertsecs $((${NOW} - ${SAVEDTIME})))
 else
-        NOTIFICATIONTYPE="СМЕРТЬ ВОРОГАМ!"
+        LAST_DURATION="(?)"
 fi
 
+NOW=`TZ=UTC date +"%s"`
+
+if [ -f $STATEFILE ] ; then
+        SAVEDTIME=`cat ${STATEFILE}`
+        LAST_DURATION=$(convertsecs $((${NOW} - ${SAVEDTIME})))
+else
+        LAST_DURATION="(?)"
+fi
+
+if [ "$NOTIFICATIONTYPE" = "RECOVERY" ] ; then
+        NOTIFICATIONTYPE="СЛАВА УКРАЇНІ!!"${REAL_NOTIFICATIONTYPE}
+        STATEPREFIX="У попередньому стані: "
+        echo $NOW > $STATEFILE
+
+elif [ "$NOTIFICATIONTYPE" = "PROBLEM" ] ; then
+        NOTIFICATIONTYPE="СМЕРТЬ ВОРОГАМ!"${REAL_NOTIFICATIONTYPE}
+        STATEPREFIX="У попередньому стані: "
+        echo $NOW > $STATEFILE
+
+else
+        NOTIFICATIONTYPE="ГЕРОЯМ СЛАВА!"${REAL_NOTIFICATIONTYPE}
+        STATEPREFIX="У цьому стані: "
+fi
+
+LAST_DURATION="${STATEPREFIX}${LAST_DURATION}"
 
 message=$(/bin/cat <<DATA
 $NOTIFICATIONTYPE
