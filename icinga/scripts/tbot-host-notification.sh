@@ -25,14 +25,9 @@ else
         LAST_DURATION="(?)"
 fi
 
-NOW=`TZ=UTC date +"%s"`
-
-if [ -f $STATEFILE ] ; then
-        SAVEDTIME=`cat ${STATEFILE}`
-        LAST_DURATION=$(convertsecs $((${NOW} - ${SAVEDTIME})))
-else
-        LAST_DURATION="(?)"
-fi
+#if [ "$USERNAME" = "dor" ] ; then
+#       REAL_NOTIFICATIONTYPE="\n(aka $NOTIFICATIONTYPE)"
+#fi
 
 if [ "$NOTIFICATIONTYPE" = "RECOVERY" ] ; then
         NOTIFICATIONTYPE="СЛАВА УКРАЇНІ!!"${REAL_NOTIFICATIONTYPE}
