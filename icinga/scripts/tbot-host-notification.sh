@@ -16,7 +16,7 @@ convertsecs() {
 
 NOW=`TZ=UTC date +"%s"`
 
-STATEFILE="/data/var/spool/icinga2/tmp/${HOSTNAME}_lastnotif_time"
+STATEFILE="/data/var/spool/icinga2/tmp/${HOSTNAME}_${USERNAME}_lastnotif_time"
 
 if [ -f $STATEFILE ] ; then
         SAVEDTIME=`cat ${STATEFILE}`
